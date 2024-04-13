@@ -10,7 +10,7 @@ namespace MemberSystem.Services
     public class GuestbookDBService
     {
         //DB connect 
-        private readonly static string cnstr = ConfigurationManager.ConnectionStrings["MemberDB"].ConnectionString;
+        private readonly static string cnstr = ConfigurationManager.ConnectionStrings["MemberDBEntities"].ConnectionString;
         //active connect
         private readonly SqlConnection conn = new SqlConnection(cnstr);
 
