@@ -4,13 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MemberDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MemberDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Guestbooks">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Account" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Content" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="Reply" Type="nvarchar" MaxLength="100" />
@@ -27,28 +27,11 @@
           <Property Name="AuthCode" Type="nchar" MaxLength="10" Nullable="false" />
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Guestbooks_Members">
-          <End Role="Members" Type="Self.Members" Multiplicity="1" />
-          <End Role="Guestbooks" Type="Self.Guestbooks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Members">
-              <PropertyRef Name="Account" />
-            </Principal>
-            <Dependent Role="Guestbooks">
-              <PropertyRef Name="Account" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="MemberDBModelStoreContainer">
           <EntitySet Name="Guestbooks" EntityType="Self.Guestbooks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Members" EntityType="Self.Members" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Guestbooks_Members" Association="Self.FK_Guestbooks_Members">
-            <End Role="Members" EntitySet="Members" />
-            <End Role="Guestbooks" EntitySet="Guestbooks" />
-          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MemberDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -57,12 +40,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Account" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Content" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Reply" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ReplyTime" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Members" Relationship="Self.FK_Guestbooks_Members" FromRole="Guestbooks" ToRole="Members" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Members">
           <Key>
@@ -74,27 +56,10 @@
           <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AuthCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Guestbooks" Relationship="Self.FK_Guestbooks_Members" FromRole="Members" ToRole="Guestbooks" />
         </EntityType>
-        <Association Name="FK_Guestbooks_Members">
-          <End Role="Members" Type="Self.Members" Multiplicity="1" />
-          <End Role="Guestbooks" Type="Self.Guestbooks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Members">
-              <PropertyRef Name="Account" />
-            </Principal>
-            <Dependent Role="Guestbooks">
-              <PropertyRef Name="Account" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="MemberDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Guestbooks" EntityType="Self.Guestbooks" />
           <EntitySet Name="Members" EntityType="Self.Members" />
-          <AssociationSet Name="FK_Guestbooks_Members" Association="Self.FK_Guestbooks_Members">
-            <End Role="Members" EntitySet="Members" />
-            <End Role="Guestbooks" EntitySet="Guestbooks" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -105,8 +70,8 @@
           <EntitySetMapping Name="Guestbooks">
             <EntityTypeMapping TypeName="MemberDBModel.Guestbooks">
               <MappingFragment StoreEntitySet="Guestbooks">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Account" ColumnName="Account" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="Reply" ColumnName="Reply" />

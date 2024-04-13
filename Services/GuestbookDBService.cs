@@ -62,7 +62,7 @@ namespace MemberSystem.Services
         public void InsertGuestbook(Guestbook newData)
         {
             //set time to now
-            string sql = $@"INSERT INTO Guestbooks(Account,Content,CreateTime) VALUES
+            string sql = $@"INSERT INTO Guestbooks(Name,Content,CreateTime) VALUES
                 ('{newData.Name}','{newData.Content}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}');";
 
             try

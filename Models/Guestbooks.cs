@@ -15,12 +15,10 @@ namespace MemberSystem.Models
     public partial class Guestbooks
     {
         public int Id { get; set; }
-        public string Account { get; set; }
         public string Content { get; set; }
         public System.DateTime CreateTime { get; set; }
         public string Reply { get; set; }
         public Nullable<System.DateTime> ReplyTime { get; set; }
-    
-        public virtual Members Members { get; set; }
+        public string Name { get; set; }
     }
 }
