@@ -70,6 +70,7 @@ namespace MemberSystem.Services
                 conn.Open();
                 //do insert instruction
                 SqlCommand cmd = new SqlCommand(sql,conn);
+                cmd.ExecuteNonQuery();
             }
             catch (Exception e)
             {
