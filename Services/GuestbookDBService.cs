@@ -10,7 +10,7 @@ namespace MemberSystem.Services
     public class GuestbookDBService
     {
         //DB connect 
-        private readonly static string cnstr = ConfigurationManager.ConnectionStrings["MemberDBEntities"].ConnectionString;
+        private readonly static string cnstr = ConfigurationManager.ConnectionStrings["MemberDB"].ConnectionString;
         //active connect
         private readonly SqlConnection conn = new SqlConnection(cnstr);
 
@@ -62,8 +62,7 @@ namespace MemberSystem.Services
         public void InsertGuestbook(Guestbook newData)
         {
             //set time to now
-            string sql = $@"INSERT INTO Guestbooks(Name,Content,CreateTime) VALUES
-                ('{newData.Name}','{newData.Content}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}');";
+            string sql = $@"INSERT INTO Guestbooks(Name,Content,CreateTime) VALUES ('{newData.Name}','{newData.Content}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}');";
 
             try
             {
