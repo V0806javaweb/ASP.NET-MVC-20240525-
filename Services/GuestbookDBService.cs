@@ -57,5 +57,8 @@ namespace MemberSystem.Services
             }
             return DataList;
         }
+        #region
+
+        #endregion
     }
 }
