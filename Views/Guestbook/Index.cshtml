@@ -1,0 +1,79 @@
+﻿@model MemberSystem.ViewModels.GuestbookViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>留言板</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<table>
+    @*DB內有資料則顯示，並附上增、刪、改連結*@
+    @if (!Model.DataList.Count.Equals(0))
+    {
+        foreach (var item in Model.DataList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.DataList[0].Name)
+                </td>
+                <td>
+                    @item.Name
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.DataList[0].CreateTime)
+                </td>
+                <td>
+                    @item.CreateTime
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.DataList[0].Content)
+                </td>
+                <td colspan="3">
+                    @item.Content
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.DataList[0].Reply)
+                </td>
+                <td colspan="3">
+                    @item.Reply
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.DataList[0].ReplyTime)
+                </td>
+                <td>
+                    @item.ReplyTime
+                </td>
+            </tr>
+        }
+    }
+    @*否則顯示尚無紀錄*@
+    else
+    {
+        <tr>
+            <td colspan="4">尚無紀錄</td>
+        </tr>
+    }
+</table>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@*import javascript for identify*@
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
