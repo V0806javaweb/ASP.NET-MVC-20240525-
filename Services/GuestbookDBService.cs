@@ -57,8 +57,32 @@ namespace MemberSystem.Services
             }
             return DataList;
         }
-        #region
+        #region 新增資料
+        //define insert record method
+        public void InsertGuestbook(Guestbook newData)
+        {
+            //set time to now
+            string sql = $@"INSERT INTO Guestbooks(Account,Content,CreateTime) VALUES
+                ('{newData.Name}','{newData.Content}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}');";
 
+            try
+            {
+                //start db connect
+                conn.Open();
+                //do insert instruction
+                SqlCommand cmd = new SqlCommand(sql,conn);
+            }
+            catch (Exception e)
+            {
+                //show exception
+                throw new Exception(e.Message.ToString());
+            }
+            finally
+            {
+                //close db connect
+                conn.Close();
+            }
+        }
         #endregion
     }
 }
