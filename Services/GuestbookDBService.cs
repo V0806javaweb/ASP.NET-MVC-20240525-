@@ -84,5 +84,98 @@ namespace MemberSystem.Services
             }
         }
         #endregion
+
+        #region 查詢一筆資料
+        //search by Id
+        public Guestbook GetDataById(int Id)
+        {
+            Guestbook Data = new Guestbook();
+            string sql = $@"SELECT * FROM Guestbooks WHERE Id = {Id};";
+            try
+            {
+            //start db connect
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql,conn);
+                //get query result
+                SqlDataReader dr = cmd.ExecuteReader();
+                dr.Read();
+                Data.Id = Convert.ToInt32(dr["Id"]);
+                Data.Name = dr["Name"].ToString();
+                Data.Content = dr["Content"].ToString();
+                Data.CreateTime = Convert.ToDateTime(dr["CreateTime"]);
+                //check reply except whitespace
+                if(!string.IsNullOrWhiteSpace(dr["Reply"].ToString()))
+                {
+                    Data.Reply = dr["Reply"].ToString();
+                    Data.ReplyTime = Convert.ToDateTime(dr["ReplyTime"]);
+                }
+            }
+            catch (Exception e)
+            {
+                //not found
+                Data = null;
+            }
+            finally
+            {
+                //end db connect
+                conn.Close();
+            }
+            return Data;
+        }
+        #endregion
+
+        #region 修改留言
+        //define method
+        public void UpdateGuestbook(Guestbook UpdateData)
+        {
+            string sql = $@"UPDATE Guestbooks SET Name = '{UpdateData.Name}',Content = '{UpdateData.Content}' WHERE Id = {UpdateData.Id};";
+
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message.ToString());
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+        #endregion
+
+        #region 回覆留言
+        //define method
+        public void ReplyGuestbook(Guestbook ReplyData)
+        {
+            string sql = $@"UPDATE Guestbooks SET Reply = '{ReplyData.Reply}',ReplyTime = '{DateTime.Now.ToString("yyyy/MM/ss HH:mm:ss")}' WHERE Id = {ReplyData.Id};";
+            try
+            {
+                //start db connect
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message.ToString());
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+        #endregion
+
+        #region 動作前檢查
+        public bool CheckUpdate(int Id)
+        {
+            Guestbook Data = GetDataById(Id);
+            return (Data != null && Data.ReplyTime == null);
+        }
+        #endregion
     }
 }

@@ -1,0 +1,57 @@
+﻿@model MemberSystem.Models.Guestbook
+
+@{
+    ViewBag.Title = "回覆留言";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h3>回覆留言</h3>
+    @*create form*@
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Name)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Content)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Content)
+                @Html.ValidationMessageFor(model => model.Content)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Reply)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Reply)
+                @Html.ValidationMessageFor(model => model.Reply)
+            </td>
+        </tr>
+    </table>
+
+    @*one reply each comment*@
+    if (Model.ReplyTime == null)
+    {
+        <input type="submit" value="回覆留言" />
+    }
+    else
+    {
+        <text>被回復的留言不能追回</text>
+        @Html.ActionLink("返回列表", "Index")
+    }
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval.js")
+}

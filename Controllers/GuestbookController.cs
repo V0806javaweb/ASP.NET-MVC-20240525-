@@ -43,5 +43,51 @@ namespace MemberSystem.Controllers
             return RedirectToAction("Index");
         }
         #endregion
+
+        #region 修改留言
+        public ActionResult Edit(int Id)
+        {
+            Guestbook Data = GuestbookService.GetDataById(Id);
+            return View(Data);
+        }
+        //action for 修改留言傳入資料
+        [HttpPost]
+        public ActionResult Edit(int Id,[Bind(Include ="Name,Content")]Guestbook UpdateData)
+        {
+            //use check method prevent update error
+            if (GuestbookService.CheckUpdate(Id))
+            {
+                UpdateData.Id = Id;
+                GuestbookService.UpdateGuestbook(UpdateData);
+                //return RedirectToAction("Index");
+            }
+            /*else
+            {
+                return RedirectToAction("Index");
+            }*/
+            return RedirectToAction("Index");
+        }
+        #endregion
+
+        #region 回覆留言
+        public ActionResult Replpy(int Id)
+        {
+            Guestbook Data = GuestbookService.GetDataById(Id);
+            return View(Data);
+        }
+
+        //modify action
+        [HttpPost]
+        public ActionResult Reply(int Id,[Bind(Include ="Reply,ReplyTime")]Guestbook ReplyData)
+        {
+            if (GuestbookService.CheckUpdate(Id))
+            {
+                ReplyData.Id = Id;
+                GuestbookService.ReplyGuestbook(ReplyData);
+            }
+
+            return RedirectToAction("Index");
+        }
+        #endregion
     }
 }

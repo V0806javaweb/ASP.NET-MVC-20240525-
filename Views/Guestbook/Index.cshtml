@@ -62,6 +62,12 @@
                     @item.ReplyTime
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    @Html.ActionLink("修改留言","Edit",new {Id = item.Id})
+                    @Html.ActionLink("回覆留言","Reply",new { Id = item.Id})
+                </td>
+            </tr>
         }
     }
     @*否則顯示尚無紀錄*@
