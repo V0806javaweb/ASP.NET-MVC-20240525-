@@ -15,7 +15,7 @@ namespace MemberSystem.Controllers
         private readonly GuestbookDBService GuestbookService = new GuestbookDBService();
 
         // GET: Guestbook
-        public ActionResult Index()
+  /*      public ActionResult Index()
         {
             //page model
             GuestbookViewModel Data = new GuestbookViewModel();
@@ -23,7 +23,8 @@ namespace MemberSystem.Controllers
             Data.DataList = GuestbookService.GetDataList();
             //deliver Data to viewpage
             return View(Data);
-        }
+        }*/
+
 
         #region 新增留言
         //add comment's initial page
@@ -70,7 +71,7 @@ namespace MemberSystem.Controllers
         #endregion
 
         #region 回覆留言
-        public ActionResult Replpy(int Id)
+        public ActionResult Reply(int Id)
         {
             Guestbook Data = GuestbookService.GetDataById(Id);
             return View(Data);
@@ -89,5 +90,25 @@ namespace MemberSystem.Controllers
             return RedirectToAction("Index");
         }
         #endregion
+
+        #region 刪除留言
+        public ActionResult Delete(int Id)
+        {
+            GuestbookService.DeleteGuestbook(Id);
+            return RedirectToAction("Index");
+        }
+        #endregion
+
+        #region 開始頁面-載入該頁所有紀錄
+        public ActionResult Index(string Search,int Page = 1)
+        {
+            GuestbookViewModel Data = new GuestbookViewModel();
+            Data.Search = Search;
+            Data.Paging = new ForPaging(Page);
+            Data.DataList = GuestbookService.GetDataList(Data.Paging,Data.Search);
+            return View(Data);
+        }
+        #endregion
+
     }
 }
