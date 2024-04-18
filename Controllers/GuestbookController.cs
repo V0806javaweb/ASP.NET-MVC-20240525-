@@ -13,18 +13,24 @@ namespace MemberSystem.Controllers
     {
         // table Guestbooks service object
         private readonly GuestbookDBService GuestbookService = new GuestbookDBService();
-
-        // GET: Guestbook
-  /*      public ActionResult Index()
+        public ActionResult Index()
         {
-            //page model
+            return View();
+        }
+        public ActionResult GetDataList(string Search,int Page = 1)
+        {
             GuestbookViewModel Data = new GuestbookViewModel();
-            //get data from service
-            Data.DataList = GuestbookService.GetDataList();
-            //deliver Data to viewpage
-            return View(Data);
-        }*/
+            Data.Search = Search;
+            Data.Paging = new ForPaging(Page);
+            Data.DataList = GuestbookService.GetDataList(Data.Paging, Data.Search);
+            return PartialView(Data);
+        }
 
+        [HttpPost]
+        public ActionResult GetDataList([Bind(Include = "Search")]GuestbookViewModel Data)
+        {
+            return RedirectToAction("GetDataList", new { Search = Data.Search });
+        }
 
         #region 新增留言
         //add comment's initial page
@@ -96,17 +102,6 @@ namespace MemberSystem.Controllers
         {
             GuestbookService.DeleteGuestbook(Id);
             return RedirectToAction("Index");
-        }
-        #endregion
-
-        #region 開始頁面-載入該頁所有紀錄
-        public ActionResult Index(string Search,int Page = 1)
-        {
-            GuestbookViewModel Data = new GuestbookViewModel();
-            Data.Search = Search;
-            Data.Paging = new ForPaging(Page);
-            Data.DataList = GuestbookService.GetDataList(Data.Paging,Data.Search);
-            return View(Data);
         }
         #endregion
 

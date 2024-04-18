@@ -4,139 +4,18 @@
     ViewBag.Title = "Index";
 }
 
-@*嵌入新增留言區塊*@
-<div id="CreateData">
+<h2>留言板</h2>
+
+@*用於避免跨網站請求CSRF*@
+@Html.AntiForgeryToken();
+
+@*新增留言*@
+<div>
     @Html.Action("Create")
 </div>
 
-<h2>留言板</h2>
-
-@*搜尋表單*@
-@using (Html.BeginForm("Index", "Guestbook", FormMethod.Get))
-{
-    <table>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.Search)
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.Search)
-            </td>
-            <td>
-                <input type="submit" value="搜尋留言" />
-            </td>
-        </tr>
-    </table>
-}
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <table>
-        @*DB內有資料則顯示，並附上增、刪、改連結*@
-        @if (!Model.DataList.Count.Equals(0))
-        {
-            foreach (var item in Model.DataList)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(model => model.DataList[0].Name)
-                    </td>
-                    <td>
-                        @item.Name
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(model => model.DataList[0].CreateTime)
-                    </td>
-                    <td>
-                        @item.CreateTime
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(model => model.DataList[0].Content)
-                    </td>
-                    <td colspan="3">
-                        @item.Content
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(model => model.DataList[0].Reply)
-                    </td>
-                    <td colspan="3">
-                        @item.Reply
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(model => model.DataList[0].ReplyTime)
-                    </td>
-                    <td>
-                        @item.ReplyTime
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        @Html.ActionLink("修改留言", "Edit", new { Id = item.Id })
-                        @Html.ActionLink("回覆留言", "Reply", new { Id = item.Id })
-                        @Html.ActionLink("刪除留言", "Delete", new { Id = item.Id })
-                    </td>
-                </tr>
-            }
-        }
-        @*否則顯示尚無紀錄*@
-        else
-        {
-            <tr>
-                <td colspan="4">尚無紀錄</td>
-            </tr>
-        }
-
-        <tr>
-            <td>
-                @*不是第1頁*@
-                @if (Model.Paging.NowPage > 1)
-                {
-                    @Html.ActionLink(" << ", "Index", new { Page = 1,Search = Model.Search})
-                    @Html.ActionLink(" < ","Index",new { Page = Model.Paging.NowPage-1,Search = Model.Search})
-                }
-            </td>
-            <td>
-                @*前、後各5頁連結*@
-                @for(var page = (Model.Paging.NowPage - 6); page < (Model.Paging.NowPage + 6); page++)
-                {
-                    if ((page > 0) && (page <= Model.Paging.MaxPage))
-                    {
-                        if (page == Model.Paging.NowPage)
-                        {
-                            <b>@page</b>
-                        }
-                        else
-                        {
-                            @Html.ActionLink(page.ToString(),"Index",new { Page = page,Search = Model.Search})
-                        }
-                    }
-                }
-            </td>
-            <td>
-                @*當前頁碼 < 總頁碼 則 顯示下頁與最後頁*@
-                @if (Model.Paging.NowPage < Model.Paging.MaxPage)
-                {
-                    @Html.ActionLink(" > ", "Index", new { Page = Model.Paging.NowPage + 1, Search = Model.Search })
-                    @Html.ActionLink(" >> ", "Index", new { Page = Model.Paging.MaxPage, Search = Model.Search})
-                }
-            </td>
-        </tr>
-    </table>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+@*載入資料*@
+@Html.Action("GetDataList")
 
 @*import javascript for identify*@
 @section Scripts {

@@ -217,6 +217,7 @@
     <Content Include="Views\Guestbook\Create.cshtml" />
     <Content Include="Views\Guestbook\Edit.cshtml" />
     <Content Include="Views\Guestbook\Reply.cshtml" />
+    <Content Include="Views\Guestbook\GetDataList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
