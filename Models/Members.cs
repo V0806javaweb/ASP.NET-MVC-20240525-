@@ -14,11 +14,20 @@ namespace MemberSystem.Models
     
     public partial class Members
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Members()
+        {
+            this.Guestbooks = new HashSet<Guestbooks>();
+        }
+    
         public string Account { get; set; }
         public string Password { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string AuthCode { get; set; }
         public bool IsAdmin { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Guestbooks> Guestbooks { get; set; }
     }
 }

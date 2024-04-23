@@ -1,0 +1,81 @@
+﻿@model MemberSystem.ViewModels.MemberRegisterViewModel
+
+@{
+    ViewBag.Title = "註冊";
+}
+
+@*匯入用到的javascript*@
+@section Scripts{
+    @Scripts.Render("~bundles/jqueryvsl")
+}
+
+<h2>註冊</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <table>
+        <tr>
+            @*Account*@
+            <td>
+                @Html.LabelFor(model => model.newMember.Account)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.newMember.Account)
+                @Html.ValidationMessageFor(model => model.newMember.Account)
+            </td>
+        </tr>
+        <tr>
+            @*Password*@
+            <td>
+                @Html.LabelFor(model => model.newMember.Password)
+            </td>
+            <td>
+                @Html.PasswordFor(model => model.newMember.Password)
+                @Html.ValidationMessageFor(model => model.newMember.Password)
+            </td>
+        </tr>
+        <tr>
+            @*PasswordCheck*@
+            <td>
+                @Html.LabelFor(model => model.PasswordChech)
+            </td>
+            <td>
+                @Html.PasswordFor(model => model.PasswordChech)
+                @Html.ValidationMessageFor(model => model.PasswordChech)
+            </td>
+        </tr>
+        <tr>
+            @*Name*@
+            <td>
+                @Html.LabelFor(model => model.newMember.Name)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.newMember.Name)
+                @Html.ValidationMessageFor(model => model.newMember.Name)
+            </td>
+        </tr>
+        <tr>
+            @*Email*@
+            <td>
+                @Html.LabelFor(model => model.newMember.Email)
+            </td>
+            <td>
+                @Html.PasswordFor(model => model.newMember.Email)
+                @Html.ValidationMessageFor(model => model.newMember.Email)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="註冊" />
+            </td>
+        </tr>
+    </table>
+}
+
+@*
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+*@

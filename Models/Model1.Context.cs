@@ -13,10 +13,10 @@ namespace MemberSystem.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class MemberDBEntities : DbContext
+    public partial class MemberDBEntities1 : DbContext
     {
-        public MemberDBEntities()
-            : base("name=MemberDBEntities")
+        public MemberDBEntities1()
+            : base("name=MemberDBEntities1")
         {
         }
     

@@ -10,7 +10,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Account" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Content" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="Reply" Type="nvarchar" MaxLength="100" />
@@ -27,9 +27,25 @@
           <Property Name="AuthCode" Type="nchar" MaxLength="10" Nullable="false" />
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Guestbooks_Members">
+          <End Role="Members" Type="Self.Members" Multiplicity="1" />
+          <End Role="Guestbooks" Type="Self.Guestbooks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Members">
+              <PropertyRef Name="Account" />
+            </Principal>
+            <Dependent Role="Guestbooks">
+              <PropertyRef Name="Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MemberDBModelStoreContainer">
           <EntitySet Name="Guestbooks" EntityType="Self.Guestbooks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Members" EntityType="Self.Members" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Guestbooks_Members" Association="Self.FK_Guestbooks_Members">
+            <End Role="Members" EntitySet="Members" />
+            <End Role="Guestbooks" EntitySet="Guestbooks" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -41,11 +57,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Account" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Content" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Reply" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ReplyTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Members" Relationship="Self.FK_Guestbooks_Members" FromRole="Guestbooks" ToRole="Members" />
         </EntityType>
         <EntityType Name="Members">
           <Key>
@@ -57,22 +74,39 @@
           <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AuthCode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Guestbooks" Relationship="Self.FK_Guestbooks_Members" FromRole="Members" ToRole="Guestbooks" />
         </EntityType>
-        <EntityContainer Name="MemberDBEntities" annotation:LazyLoadingEnabled="true">
+        <Association Name="FK_Guestbooks_Members">
+          <End Role="Members" Type="Self.Members" Multiplicity="1" />
+          <End Role="Guestbooks" Type="Self.Guestbooks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Members">
+              <PropertyRef Name="Account" />
+            </Principal>
+            <Dependent Role="Guestbooks">
+              <PropertyRef Name="Account" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MemberDBEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Guestbooks" EntityType="Self.Guestbooks" />
           <EntitySet Name="Members" EntityType="Self.Members" />
+          <AssociationSet Name="FK_Guestbooks_Members" Association="Self.FK_Guestbooks_Members">
+            <End Role="Members" EntitySet="Members" />
+            <End Role="Guestbooks" EntitySet="Guestbooks" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MemberDBModelStoreContainer" CdmEntityContainer="MemberDBEntities">
+        <EntityContainerMapping StorageEntityContainer="MemberDBModelStoreContainer" CdmEntityContainer="MemberDBEntities1">
           <EntitySetMapping Name="Guestbooks">
             <EntityTypeMapping TypeName="MemberDBModel.Guestbooks">
               <MappingFragment StoreEntitySet="Guestbooks">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="Reply" ColumnName="Reply" />
