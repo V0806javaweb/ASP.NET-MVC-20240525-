@@ -134,5 +134,58 @@ namespace MemberSystem.Services
             return ValidateStr;
         }
         #endregion
+
+        #region 登入確認
+        public string LoginCheck(string Account,string Password)
+        {
+            Member LoginMember = GetDataByAccount(Account);
+            //確認會員是否存在
+            if (LoginMember != null)
+            {
+                //確認是否完成驗證
+                if (String.IsNullOrWhiteSpace(LoginMember.AuthCode))
+                {
+                    if (PasswordCheck(LoginMember, Password))
+                    {
+                        return "";
+                    }
+                    else
+                    {
+                        return "帳密輸入錯誤";
+                    }
+                }
+                else
+                {
+                    return "尚未完成驗證";
+                }
+            }
+            else
+            {
+                return "尚未註冊";
+            }
+        }
+        #endregion
+
+        #region 密碼確認
+        public bool PasswordCheck(Member CheckMember,string Password)
+        {
+            bool result = CheckMember.Password.Equals(HashPassword(Password));
+            return result;
+        }
+        #endregion
+
+        #region 識別身分組
+        public string GetRole(string Account)
+        {
+            string Role = "User";
+            Member LoginMember = GetDataByAccount(Account);
+            
+            //管理員額外加
+            if (LoginMember.IsAdmin)
+                Role += ",Admin";
+
+            return Role;
+        }
+        #endregion
     }
 }

@@ -76,5 +76,33 @@ namespace MemberSystem.Controllers
             return View();
         }
         #endregion
+
+        #region 登入
+        public ActionResult Login()
+        {
+            //確認是否成功登入
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index","Guestbook");
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(MemberLoginViewModel LoginMember)
+        {
+            string ValidateStr = memberService.LoginCheck(LoginMember.Account, LoginMember.Password);
+            if (String.IsNullOrEmpty(ValidateStr))
+            {
+                //登入成功 進首頁
+                return RedirectToAction("Index", "Guestbook");
+            }
+            else
+            {
+                //傳回錯誤訊息
+                ModelState.AddModelError("",ValidateStr);
+                return View(LoginMember);
+            }
+        }
+        #endregion
     }
 }

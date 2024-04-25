@@ -51,6 +51,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="jose-jwt, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\jose-jwt.5.0.0\lib\net472\jose-jwt.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -158,11 +161,14 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\JwtObject.cs" />
+    <Compile Include="Security\JwtService.cs" />
     <Compile Include="Services\ForPaging.cs" />
     <Compile Include="Services\GuestbookDBService.cs" />
     <Compile Include="Services\MailService.cs" />
     <Compile Include="Services\MemberDBService.cs" />
     <Compile Include="ViewModels\GuestbookViewModel.cs" />
+    <Compile Include="ViewModels\MemberLoginViewModel.cs" />
     <Compile Include="ViewModels\MemberRegisterViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +233,7 @@
     <Content Include="Views\Member\Register.cshtml" />
     <Content Include="Views\Member\RegisterResult.cshtml" />
     <Content Include="Views\Member\EmailValidate.cshtml" />
+    <Content Include="Views\Member\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
