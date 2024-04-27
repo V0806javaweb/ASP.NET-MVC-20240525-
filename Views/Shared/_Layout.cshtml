@@ -24,6 +24,11 @@
                     <li>@Html.ActionLink("首頁", "Index", "Home")</li>
                     <li>@Html.ActionLink("關於", "About", "Home")</li>
                     <li>@Html.ActionLink("連絡人", "Contact", "Home")</li>
+                    @*登入後可見*@
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("登出", "Logout", "Member")</li>
+                    }
                 </ul>
             </div>
         </div>
@@ -32,7 +37,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 應用程式</p>
+            <p>&copy; @DateTime.Now.Year - Chen's ASP.NET 應用程式</p>
         </footer>
     </div>
 

@@ -39,7 +39,7 @@ namespace MemberSystem.Services
         public void InsertGuestbook(Guestbook newData)
         {
             //set time to now
-            string sql = $@"INSERT INTO Guestbooks(Name,Content,CreateTime) VALUES ('{newData.Name}','{newData.Content}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}');";
+            string sql = $@"INSERT INTO Guestbooks(Account,Content,CreateTime) VALUES ('{newData.Account}','{newData.Content}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}');";
 
             try
             {
@@ -67,7 +67,7 @@ namespace MemberSystem.Services
         public Guestbook GetDataById(int Id)
         {
             Guestbook Data = new Guestbook();
-            string sql = $@"SELECT * FROM Guestbooks WHERE Id = {Id};";
+            string sql = $@"SELECT * FROM Guestbooks m inner join Members d on m.Account = d.Account WHERE Id = {Id};";
             try
             {
             //start db connect
@@ -77,7 +77,7 @@ namespace MemberSystem.Services
                 SqlDataReader dr = cmd.ExecuteReader();
                 dr.Read();
                 Data.Id = Convert.ToInt32(dr["Id"]);
-                Data.Name = dr["Name"].ToString();
+                Data.Account = dr["Account"].ToString();
                 Data.Content = dr["Content"].ToString();
                 Data.CreateTime = Convert.ToDateTime(dr["CreateTime"]);
                 //check reply except whitespace
@@ -86,6 +86,7 @@ namespace MemberSystem.Services
                     Data.Reply = dr["Reply"].ToString();
                     Data.ReplyTime = Convert.ToDateTime(dr["ReplyTime"]);
                 }
+                Data.Member.Name = dr["Name"].ToString();
             }
             catch (Exception e)
             {
@@ -105,7 +106,7 @@ namespace MemberSystem.Services
         //define method
         public void UpdateGuestbook(Guestbook UpdateData)
         {
-            string sql = $@"UPDATE Guestbooks SET Name = '{UpdateData.Name}',Content = '{UpdateData.Content}' WHERE Id = {UpdateData.Id};";
+            string sql = $@"UPDATE Guestbooks SET Account = '{UpdateData.Account}',Content = '{UpdateData.Content}' WHERE Id = {UpdateData.Id};";
 
             try
             {
@@ -197,7 +198,7 @@ namespace MemberSystem.Services
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 SqlDataReader dr = cmd.ExecuteReader();
-                while (dr.Read())
+                /*while (dr.Read())
                 {
                     Guestbook Data = new Guestbook();
                     Data.Id = Convert.ToInt32(dr["Id"]);
@@ -211,7 +212,7 @@ namespace MemberSystem.Services
                         Data.ReplyTime = Convert.ToDateTime(dr["ReplyTime"]);
                     }
                     DataList.Add(Data);
-                }
+                }*/
             }
             catch (Exception e)
             {
@@ -262,7 +263,7 @@ namespace MemberSystem.Services
         public void SetMaxPaging(ForPaging Paging,string Search)
         {
             int Row = 0;
-            string sql = $@"SELECT * FROM Guestbooks WHERE Name LIKE '%{Search}%' OR Content LIKE '%{Search}%' OR Reply LIKE '%{Search}%';";
+            string sql = $@"SELECT * FROM Guestbooks WHERE Content LIKE '%{Search}%' OR Reply LIKE '%{Search}%';";
             try
             {
                 conn.Open();
@@ -290,27 +291,13 @@ namespace MemberSystem.Services
         public List<Guestbook> GetAllDataList(ForPaging paging)
         {
             List<Guestbook> DataList = new List<Guestbook>();
-            string sql = $@"SELECT * FROM (SELECT row_number() OVER(ORDER BY Id) AS sort,* FROM Guestbooks) m WHERE m.sort BETWEEN {(paging.NowPage-1)*paging.ItemNum+1} AND {paging.NowPage*paging.ItemNum};";
+            //string sql = $@"SELECT * FROM (SELECT row_number() OVER(ORDER BY Id) AS sort,* FROM Guestbooks) m WHERE m.sort BETWEEN {(paging.NowPage-1)*paging.ItemNum+1} AND {paging.NowPage*paging.ItemNum};";
+            string sql = $@"SELECT m.*,d.Name,d.IsAdmin FROM (SELECT row_number() OVER(ORDER BY Id) AS sort,* FROM Guestbooks) m inner join Members d on m.Account = d.Account WHERE m.sort BETWEEN {(paging.NowPage - 1) * paging.ItemNum + 1} AND {paging.NowPage * paging.ItemNum};";
             try
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 SqlDataReader dr = cmd.ExecuteReader();
-                /*               while (dr.Read())
-                               {
-                                   Guestbook Data = new Guestbook();
-                                   Data.Id = Convert.ToInt32(dr["Id"]);
-                                   Data.Name = dr["Name"].ToString();
-                                   Data.Content = dr["Content"].ToString();
-                                   Data.CreateTime = Convert.ToDateTime(dr["CreateTime"]);
-                                   //adding in if have replytime
-                                   if (!dr["ReplyTime"].Equals(DBNull.Value))
-                                   {
-                                       Data.Reply = dr["Reply"].ToString();
-                                       Data.ReplyTime = Convert.ToDateTime(dr["ReplyTime"]);
-                                   }
-                                   DataList.Add(Data);
-                               }*/
                 GDL(dr, DataList);
             }
             catch (Exception e)
@@ -328,7 +315,8 @@ namespace MemberSystem.Services
         public List<Guestbook> GetAllDataList(ForPaging paging,string Search)
         {
             List<Guestbook> DataList = new List<Guestbook>();
-            string sql = $@"SELECT * FROM (SELECT row_number() OVER(order by Id) AS sort,* FROM Guestbooks WHERE Name LIKE '%{Search}%' OR Content LIKE '%{Search}%' OR Reply LIKE '%{Search}%') m WHERE m.sort BETWEEN {(paging.NowPage - 1) * paging.ItemNum + 1} AND {paging.NowPage * paging.ItemNum};";
+            //string sql = $@"SELECT * FROM (SELECT row_number() OVER(order by Id) AS sort,* FROM Guestbooks WHERE Name LIKE '%{Search}%' OR Content LIKE '%{Search}%' OR Reply LIKE '%{Search}%') m WHERE m.sort BETWEEN {(paging.NowPage - 1) * paging.ItemNum + 1} AND {paging.NowPage * paging.ItemNum};";
+            string sql = $@"SELECT m.*,d.Name,d.IsAdmin FROM (SELECT row_number() OVER(order by Id) AS sort,* FROM Guestbooks WHERE Content LIKE '%{Search}%' OR Reply LIKE '%{Search}%') m inner join Members d on m.Account = d.Account WHERE m.sort BETWEEN {(paging.NowPage - 1) * paging.ItemNum + 1} AND {paging.NowPage * paging.ItemNum};";
             try
             {
                 conn.Open();
@@ -355,7 +343,7 @@ namespace MemberSystem.Services
             {
                 Guestbook Data = new Guestbook();
                 Data.Id = Convert.ToInt32(vdr["Id"]);
-                Data.Name = vdr["Name"].ToString();
+                Data.Account = vdr["Account"].ToString();
                 Data.Content = vdr["Content"].ToString();
                 Data.CreateTime = Convert.ToDateTime(vdr["CreateTime"]);
                 //adding in if have replytime
@@ -364,6 +352,7 @@ namespace MemberSystem.Services
                     Data.Reply = vdr["Reply"].ToString();
                     Data.ReplyTime = Convert.ToDateTime(vdr["ReplyTime"]);
                 }
+                Data.Member.Name = vdr["Name"].ToString();
                 vDL.Add(Data);
             }
         }

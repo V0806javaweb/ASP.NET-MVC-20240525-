@@ -1,8 +1,8 @@
 ﻿@model MemberSystem.Models.Guestbook
 
-@{
-    ViewBag.Title = "回覆留言";
-}
+@{ViewBag.Title = "回覆留言";}
+
+@section Scripts {@Scripts.Render("~/bundles/jqueryval.js")}
 
 @using (Html.BeginForm())
 {
@@ -11,15 +11,6 @@
     <h3>回覆留言</h3>
     @*create form*@
     <table>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.Name)
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.Name)
-                @Html.ValidationMessageFor(model => model.Name)
-            </td>
-        </tr>
         <tr>
             <td>
                 @Html.LabelFor(model => model.Content)
@@ -52,6 +43,3 @@
     }
 }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval.js")
-}

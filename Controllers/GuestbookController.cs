@@ -42,9 +42,12 @@ namespace MemberSystem.Controllers
         //action about add or sent comment
         //HttpPost only
         //以Bind Include限制接受的欄位值
+        [Authorize]
         [HttpPost]
-        public ActionResult Create([Bind(Include ="Name,Content")] Guestbook Data)
+        public ActionResult Create([Bind(Include ="Content")] Guestbook Data)
         {
+            //紀錄留言人為當前登入者
+            Data.Account = User.Identity.Name;
             GuestbookService.InsertGuestbook(Data);
             //back to Index page
             return RedirectToAction("Index");
@@ -52,19 +55,22 @@ namespace MemberSystem.Controllers
         #endregion
 
         #region 修改留言
+        [Authorize]
         public ActionResult Edit(int Id)
         {
             Guestbook Data = GuestbookService.GetDataById(Id);
             return View(Data);
         }
         //action for 修改留言傳入資料
+        [Authorize]
         [HttpPost]
-        public ActionResult Edit(int Id,[Bind(Include ="Name,Content")]Guestbook UpdateData)
+        public ActionResult Edit(int Id,[Bind(Include ="Content")]Guestbook UpdateData)
         {
             //use check method prevent update error
             if (GuestbookService.CheckUpdate(Id))
             {
                 UpdateData.Id = Id;
+                UpdateData.Account = User.Identity.Name;
                 GuestbookService.UpdateGuestbook(UpdateData);
                 //return RedirectToAction("Index");
             }
@@ -77,6 +83,7 @@ namespace MemberSystem.Controllers
         #endregion
 
         #region 回覆留言
+        [Authorize(Roles = "Admin")]
         public ActionResult Reply(int Id)
         {
             Guestbook Data = GuestbookService.GetDataById(Id);
@@ -85,6 +92,7 @@ namespace MemberSystem.Controllers
 
         //modify action
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult Reply(int Id,[Bind(Include ="Reply,ReplyTime")]Guestbook ReplyData)
         {
             if (GuestbookService.CheckUpdate(Id))
@@ -98,6 +106,7 @@ namespace MemberSystem.Controllers
         #endregion
 
         #region 刪除留言
+        [Authorize(Roles = "Admin")] //管理員才有權刪留言
         public ActionResult Delete(int Id)
         {
             GuestbookService.DeleteGuestbook(Id);

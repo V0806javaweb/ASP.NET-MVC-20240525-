@@ -1,9 +1,11 @@
-﻿using MemberSystem.Services;
+﻿using MemberSystem.Security;
+using MemberSystem.Services;
 using MemberSystem.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace MemberSystem.Controllers
@@ -93,6 +95,24 @@ namespace MemberSystem.Controllers
             string ValidateStr = memberService.LoginCheck(LoginMember.Account, LoginMember.Password);
             if (String.IsNullOrEmpty(ValidateStr))
             {
+                //get role from service
+                string RoleData = memberService.GetRole(LoginMember.Account);
+                //set JWT
+                JwtService jwtService = new JwtService();
+
+                //get data from web.config
+                //cookie name
+                string cookieName = WebConfigurationManager.AppSettings["CookieName"].ToString();
+                string Token = jwtService.GenerateToken(LoginMember.Account, RoleData);
+                //generate a cookie
+                HttpCookie cookie = new HttpCookie(cookieName);
+                cookie.Value = Server.UrlEncode(Token);
+                //feed to clinet
+                Response.Cookies.Add(cookie);
+                //set expire timer
+                Response.Cookies[cookieName].Expires = DateTime.Now.AddMinutes
+                    (Convert.ToInt32(WebConfigurationManager.AppSettings["ExpireMinutes"]));
+
                 //登入成功 進首頁
                 return RedirectToAction("Index", "Guestbook");
             }
@@ -102,6 +122,22 @@ namespace MemberSystem.Controllers
                 ModelState.AddModelError("",ValidateStr);
                 return View(LoginMember);
             }
+        }
+        #endregion
+
+        #region 登出
+        [Authorize]
+        public ActionResult Logout()
+        {
+            //get cookie name
+            string cookieName = WebConfigurationManager.AppSettings["CookieName"].ToString();
+            //clean cookie
+            HttpCookie cookie = new HttpCookie(cookieName);
+            cookie.Expires = DateTime.Now.AddDays(-1);
+            cookie.Values.Clear();
+            Response.Cookies.Set(cookie);
+
+            return RedirectToAction("Login");
         }
         #endregion
     }
