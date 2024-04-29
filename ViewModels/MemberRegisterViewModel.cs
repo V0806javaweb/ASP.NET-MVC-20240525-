@@ -16,8 +16,8 @@ namespace MemberSystem.ViewModels
         public string Password { get; set; }
 
         [DisplayName("確認密碼")]
-        [Compare("Password", ErrorMessage = "輸入密碼不一致")]
+        [Compare("Password", ErrorMessage = "兩次輸入密碼不一致")]
         [Required(ErrorMessage = "再次輸入密碼")]
-        public string PasswordChech { get; set; }
+        public string PasswordCheck { get; set; }
     }
 }

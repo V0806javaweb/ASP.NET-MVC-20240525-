@@ -29,21 +29,21 @@
         <tr>
             @*Password*@
             <td>
-                @Html.LabelFor(model => model.newMember.Password)
+                @Html.LabelFor(model => model.Password)
             </td>
             <td>
-                @Html.PasswordFor(model => model.newMember.Password)
-                @Html.ValidationMessageFor(model => model.newMember.Password)
+                @Html.PasswordFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
             </td>
         </tr>
         <tr>
             @*PasswordCheck*@
             <td>
-                @Html.LabelFor(model => model.PasswordChech)
+                @Html.LabelFor(model => model.PasswordCheck)
             </td>
             <td>
-                @Html.PasswordFor(model => model.PasswordChech)
-                @Html.ValidationMessageFor(model => model.PasswordChech)
+                @Html.PasswordFor(model => model.PasswordCheck)
+                @Html.ValidationMessageFor(model => model.PasswordCheck)
             </td>
         </tr>
         <tr>
@@ -62,7 +62,7 @@
                 @Html.LabelFor(model => model.newMember.Email)
             </td>
             <td>
-                @Html.PasswordFor(model => model.newMember.Email)
+                @Html.TextBoxFor(model => model.newMember.Email)
                 @Html.ValidationMessageFor(model => model.newMember.Email)
             </td>
         </tr>

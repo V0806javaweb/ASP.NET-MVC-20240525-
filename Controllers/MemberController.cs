@@ -56,7 +56,7 @@ namespace MemberSystem.Controllers
 
             //未驗證，清除用戶輸入返回
             RegisterMember.Password = null;
-            RegisterMember.PasswordChech = null;
+            RegisterMember.PasswordCheck = null;
             return View(RegisterMember);
         }
 
@@ -138,6 +138,26 @@ namespace MemberSystem.Controllers
             Response.Cookies.Set(cookie);
 
             return RedirectToAction("Login");
+        }
+        #endregion
+
+        #region 修改密碼
+        [Authorize]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordViewModel ChangeData)
+        {
+            //確保資料皆已驗證
+            if (ModelState.IsValid)
+            {
+                ViewData["ChangeState"] = memberService.ChangePassword(User.Identity.Name, ChangeData.Password, ChangeData.NewPassword);
+            }
+            return View();
         }
         #endregion
     }

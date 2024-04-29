@@ -21,13 +21,17 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
-                    <li>@Html.ActionLink("關於", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡人", "Contact", "Home")</li>
-                    @*登入後可見*@
-                    @if (User.Identity.IsAuthenticated)
+                    @if (Request.IsAuthenticated)
                     {
+                        <li style="color:white">您好，@(User.Identity.Name)</li>
+                        <li>@Html.ActionLink("變更密碼", "ChangePassword", "Member")</li>
                         <li>@Html.ActionLink("登出", "Logout", "Member")</li>
+                    }
+                    @*未登入情況*@
+                    else
+                    {
+                        <li>@Html.ActionLink("註冊", "Register", "Member")</li>
+                        <li>@Html.ActionLink("登入", "Login", "Member")</li>
                     }
                 </ul>
             </div>

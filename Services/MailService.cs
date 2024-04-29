@@ -39,7 +39,7 @@ namespace MemberSystem.Services
         public void SendRegisterMail(string MailBody,string ToEmail)
         {
             //smtp object using gmail
-            SmtpClient SmtpServer = new SmtpClient("stmp.gmail.com");
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
             //port for gmail
             SmtpServer.Port = 587;
             SmtpServer.Credentials = new System.Net.NetworkCredential(gmail_account, gmail_password);

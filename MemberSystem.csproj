@@ -167,6 +167,7 @@
     <Compile Include="Services\GuestbookDBService.cs" />
     <Compile Include="Services\MailService.cs" />
     <Compile Include="Services\MemberDBService.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\GuestbookViewModel.cs" />
     <Compile Include="ViewModels\MemberLoginViewModel.cs" />
     <Compile Include="ViewModels\MemberRegisterViewModel.cs" />
@@ -234,6 +235,7 @@
     <Content Include="Views\Member\RegisterResult.cshtml" />
     <Content Include="Views\Member\EmailValidate.cshtml" />
     <Content Include="Views\Member\Login.cshtml" />
+    <Content Include="Views\Member\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

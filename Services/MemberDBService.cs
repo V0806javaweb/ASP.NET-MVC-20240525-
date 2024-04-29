@@ -187,5 +187,39 @@ namespace MemberSystem.Services
             return Role;
         }
         #endregion
+
+        #region 變更密碼
+        public string ChangePassword(string Account,string Password,string newPassword)
+        {
+            Member LoginMember = GetDataByAccount(Account);
+
+            //密碼正確才能修改
+            if (PasswordCheck(LoginMember, Password))
+            {
+                LoginMember.Password = HashPassword(newPassword);
+                string sql = $@"update Members set Password = '{LoginMember.Password}' where Account = '{Account}'";
+
+                try
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(sql, conn);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message.ToString());
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                return "修改成功";
+            }
+            else
+            {
+                return "原密碼有誤";
+            }
+        }
+        #endregion
     }
 }
