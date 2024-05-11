@@ -8,8 +8,8 @@ namespace MemberSystem.Services
 {
     public class MailService
     {
-        private string gmail_account = "u10806156@ms.ttu.edu.tw";
-        private string gmail_password = "ndrq vanh peqc sdxy";
+        private string gmail_account = "0";
+        private string gmail_password = "0";
         //private string gmail_mail = "";
 
         #region 寄送驗證信
