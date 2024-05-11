@@ -11,6 +11,7 @@ namespace MemberSystem.ViewModels
     public class MemberRegisterViewModel
     {
         public Member newMember { get; set; }
+
         [DisplayName("密碼")]
         [Required(ErrorMessage ="輸入密碼")]
         public string Password { get; set; }

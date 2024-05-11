@@ -13,7 +13,7 @@ namespace MemberSystem.Services
     public class MemberDBService
     {
         //DB connect 
-        private readonly static string cnstr = ConfigurationManager.ConnectionStrings["MemberDBEntities"].ConnectionString;
+        private readonly static string cnstr = ConfigurationManager.ConnectionStrings["MemberDB"].ConnectionString;
         //active connect
         private readonly SqlConnection conn = new SqlConnection(cnstr);
 
@@ -92,7 +92,7 @@ namespace MemberSystem.Services
         public bool AccountCheck(string Account)
         {
             Member Data = GetDataByAccount(Account);
-            return !(Data == null);
+            return (Data == null);
         }
         #endregion
 

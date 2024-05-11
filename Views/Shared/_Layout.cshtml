@@ -26,6 +26,7 @@
                         <li style="color:white">您好，@(User.Identity.Name)</li>
                         <li>@Html.ActionLink("變更密碼", "ChangePassword", "Member")</li>
                         <li>@Html.ActionLink("登出", "Logout", "Member")</li>
+                        <li>@Html.ActionLink("購物車","Index","Cart")</li>
                     }
                     @*未登入情況*@
                     else

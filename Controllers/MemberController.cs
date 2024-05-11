@@ -14,6 +14,7 @@ namespace MemberSystem.Controllers
     {
         private readonly MemberDBService memberService = new MemberDBService();
         private readonly MailService mailService = new MailService();
+        private readonly CartService cartService = new CartService();
         
         public ActionResult Index()
         {
@@ -26,7 +27,7 @@ namespace MemberSystem.Controllers
         {
             //確認是否登入
             if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index","Guestbook");
+                return RedirectToAction("Index","Item");
 
             return View();
         }
@@ -84,7 +85,7 @@ namespace MemberSystem.Controllers
         {
             //確認是否成功登入
             if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index","Guestbook");
+                return RedirectToAction("Index","Item");
 
             return View();
         }
@@ -95,6 +96,16 @@ namespace MemberSystem.Controllers
             string ValidateStr = memberService.LoginCheck(LoginMember.Account, LoginMember.Password);
             if (String.IsNullOrEmpty(ValidateStr))
             {
+                //clean session
+                HttpContext.Session.Clear();
+                //載入購物車內容
+                string Cart = cartService.GetCartSave(LoginMember.Account);
+                //購物車未空則存入session
+                if (Cart != null)
+                {
+                    HttpContext.Session["Cart"] = Cart;
+                }
+
                 //get role from service
                 string RoleData = memberService.GetRole(LoginMember.Account);
                 //set JWT
@@ -114,7 +125,7 @@ namespace MemberSystem.Controllers
                     (Convert.ToInt32(WebConfigurationManager.AppSettings["ExpireMinutes"]));
 
                 //登入成功 進首頁
-                return RedirectToAction("Index", "Guestbook");
+                return RedirectToAction("Index", "Item");
             }
             else
             {
