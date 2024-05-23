@@ -13,7 +13,7 @@ namespace MemberSystem.Services
         public int MaxPage { get; set; }
         //手動指定1頁多少筆資料
         //唯獨
-        public int ItemNum { get { return 2; } }
+        public int ItemNum { get { return 5; } }
 
         //default constructor
         public ForPaging()

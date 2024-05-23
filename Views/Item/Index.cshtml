@@ -1,0 +1,91 @@
+﻿@model MemberSystem.ViewModels.ItemViewModel
+
+@{
+    ViewBag.Title = "商城首頁";
+ }}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")    
+}
+
+<h2>商品一覽</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()<table>
+        @*資料是否傳入*@
+        @if (!Model.IdList.Count.Equals(0)) 
+        {
+            @*5個一列算總數*@
+            int row = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(Model.IdList.Count) / 5));
+
+            for (int r=0;r<row;r++) 
+            {
+                <tr>
+                    @for (int i=5*r;i<(r+1)*5;i++) 
+                    {
+                        if (i < Model.IdList.Count)
+                        {
+                            <td id="ItemBlock-@(Model.IdList[i])">
+                                @Html.Partial("ItemBlock",Model.ItemBlock[i])
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        }
+        @*還沒有上架販售物*@                
+        else
+        {
+            <tr>
+                <td colspan="4">還沒有商品上架</td>
+            </tr>
+        }
+
+        <tr>
+            <td>
+                @*當前頁數>1則顯示往前按鈕*@
+                @if (Model.Paging.NowPage>1)
+                {
+                    @Html.ActionLink(" << ","Index",new { Page = 1})
+                    @Html.ActionLink(" < ","Index",new { Page = Model.Paging.NowPage-1})
+                }
+            </td>
+            <td>
+                @*當前頁數之前*@
+                @for(var page = (Model.Paging.NowPage - 6); page < (Model.Paging.NowPage + 6); page++)
+                {
+                    if ((page > 0)&&(page<=Model.Paging.MaxPage))
+                    {
+                        if (page == Model.Paging.NowPage)
+                        {
+                            <b>@page</b>
+                        }
+                        else
+                        {
+                            @Html.ActionLink(page.ToString(), "Index", new {Page = page})
+                        }
+                    }
+                }
+            </td>
+            <td>
+                @*當前頁數之後*@
+                @if (Model.Paging.NowPage < Model.Paging.MaxPage)
+                {
+                    @Html.ActionLink(" > ", "Index", new { Page = Model.Paging.NowPage + 1 })
+                    @Html.ActionLink(" >> ", "Index", new { Page = Model.Paging.MaxPage })
+                }
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    
+    @*管理者可見*@@            
+    if (User.Identity.IsAuthenticated && User.IsInRole("Admin")) 
+    { 
+            <a href="@Url.Action("Create")">
+                <input type="button" value="新增商品" />
+            </a>
+    }
+}

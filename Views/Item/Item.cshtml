@@ -1,0 +1,40 @@
+﻿@model MemberSystem.ViewModels.ItemDetailViewModel
+
+@{
+    ViewBag.Title = "商品資料 - " + Model.Data.Name;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h2>@Model.Data.Name</h2>
+    @Html.DisplayNameFor(model => model.Data.Price)
+    <img src="@Html.Encode(Url.Content("~/Upload/"+Model.Data.Image))" />
+    <br />
+
+    @*登入可見購物車*@@
+    if (User.Identity.IsAuthenticated)
+    {
+        if (Model.InCart)
+        {
+            <text>已於購物車</text>
+            @Html.ActionLink("移除", "Pop", "Cart", new { Id = Model.Data.Id, toPage = "Item" }, null)
+        }
+        else
+        {
+            @Html.ActionLink("加入購物車", "Put", "Cart", new { Id = Model.Data.Id, toPage = "Item" }, null)
+        }
+        if (User.IsInRole("Admin"))
+        {
+            @Html.ActionLink("下架商品", "Delete", new { Id = Model.Data.Id })
+        }
+    }
+    else
+    {
+        <text>購物車僅限會員，請</text>
+        @Html.ActionLink("登入", "Login","Member")
+    }
+}
+
+

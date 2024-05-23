@@ -1,0 +1,55 @@
+﻿@model MemberSystem.ViewModels.ItemCreateViewModel
+
+@{ 
+    ViewBag.Title = "新增商品";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")    
+}
+
+<h2>新增商品</h2>
+@using (Html.BeginForm("Add","Item", FormMethod.Post, new { enctype = "multipart/form-data"}))
+{
+    @Html.AntiForgeryToken()
+
+    @*驗證錯誤訊息彙總於此*@
+    @Html.ValidationSummary(true)
+
+<table>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.NewData.Name)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.NewData.Name)
+            @Html.ValidationMessageFor(model => model.NewData.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.NewData.Price)
+        </td>
+        <td>
+            @Html.TextBoxFor(model => model.NewData.Price)
+            @Html.ValidationMessageFor(model => model.NewData.Price)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.ItemImage)
+        </td>
+        <td>
+            @*<input type="file" name="ItemImage" id="ItemImage" />*@
+            @Html.TextBoxFor(model => model.ItemImage, new { type = "file" })
+            @Html.ValidationMessageFor(model => model.ItemImage)
+        </td>
+    </tr>
+</table>
+<input type="submit" value="上架商品" />
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

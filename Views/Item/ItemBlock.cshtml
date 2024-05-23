@@ -1,0 +1,52 @@
+﻿@model MemberSystem.ViewModels.ItemDetailViewModel
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <table>
+        <tr>
+            @*商品樣圖*@
+            <td>
+                <img width="100" src="@Html.Encode(Url.Content("~/Upload/"+Model.Data.Image))"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.ActionLink(Model.Data.Name,"Item",new { Id = Model.Data.Id})
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @*登入可用購物車*@
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @*商品已於購物車，顯示移出購物車選項*@
+                    if (Model.InCart)
+                    {
+                        <text>已加入購物車</text>
+                        @*ajax helper call Pop action from CartController*@
+                        @*                                          攜帶參數指定*@
+                        @Ajax.ActionLink("按此移除", "Pop", "Cart", new { Id = Model.Data.Id, toPage = "ItemBlock" },
+                            new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ItemBlock-" + Model.Data.Id })
+                        @*取代原區塊                                   區塊位置*@
+                    }
+                    @*商品不在購物車，顯示加入購物車選項*@
+                    else
+                    {
+                        @*ajax helper call Put action from CartController*@
+                        @*                                          攜帶參數指定*@
+                        @Ajax.ActionLink("加入購物車", "Put", "Cart", new { Id = Model.Data.Id, toPage = "ItemBlock" },
+                            new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ItemBlock-" + Model.Data.Id })
+                        @*取代原區塊                                   區塊位置*@
+                    }
+                }
+                else
+                {
+                    <text>使用購物車需</text>
+                    @Html.ActionLink("登入", "Login","Member")
+                }
+            </td>
+        </tr>
+    </table>
+}
