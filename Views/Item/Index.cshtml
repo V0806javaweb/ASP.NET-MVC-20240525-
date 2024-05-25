@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "商城首頁";
- }}
+ }
 
 @section scripts
 {
@@ -81,7 +81,7 @@
         </tr>
     </table>
     
-    @*管理者可見*@@            
+    @*管理者可見*@            
     if (User.Identity.IsAuthenticated && User.IsInRole("Admin")) 
     { 
             <a href="@Url.Action("Create")">

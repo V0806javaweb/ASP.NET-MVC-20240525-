@@ -81,6 +81,7 @@ namespace MemberSystem.Services
             string sql = $@"SELECT * FROM Item;";
             try
             {
+                conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
